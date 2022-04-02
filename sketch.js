@@ -75,6 +75,7 @@ function setup() {
   score=0;
   //Initial value of chances
   chances=3;
+  donations=0;
   
   //To create gameOver sprite
   gameOver=createSprite(width/2,height-250,10,10)
@@ -311,7 +312,7 @@ function obstacles()
   //To assign velocity to banana
   beggar.velocityX=-(4+score/15);
   //To assign lifetime to banana to avoid memory leaks
-  beggar.lifetime=width/obstacle.velocity;
+  beggar.lifetime=width/beggar.velocity;
   //Adding obstacles to obsgroup
   begGroup.add(beggar);
   }
