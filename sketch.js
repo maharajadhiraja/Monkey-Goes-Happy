@@ -3,10 +3,11 @@ var monkey,monkey_run,monkey_stop;
 var banana ,banana_img;
 var obstacle,obstacle_img;
 var orange, orange_img;
+var beggar, beggar_img;
 //Group variables
-var foodGroup,obsGroup,orangeGroup;
+var foodGroup,obsGroup,orangeGroup,begGroup;
 //Score & losing system
-var survivalTime,score,chances;
+var survivalTime,score,chances,donations;
 var ground,ground_img;
 var gameOver,gameOver_img;
 var restart,restart_img;
@@ -35,7 +36,7 @@ function preload()
   orange_img=loadImage("orange.png");
   gameOver_img=loadImage("gameover.png");
   restart_img=loadImage("restart.png");
-
+  beggar_img = loadImage("beggar.png");
   //To load sounds  
   longjump_sound=loadSound("longjump.mp3");
   jumpSound=loadSound("jump.mp3");
@@ -67,7 +68,7 @@ function setup() {
   foodGroup=new Group();
   obsGroup=new Group();
   orangeGroup=new Group();
-  
+  begGroup=new Group();
   //Initial value of survival Time
   survivalTime=10;
   //Initial value of score
@@ -173,6 +174,7 @@ function draw()
     //To add gravity 
     monkey.velocityY=monkey.velocityY+0.5;
     
+    
     //To increase the score when monkey touches banana
     if(monkey.isTouching(foodGroup))
     {
@@ -203,6 +205,13 @@ function draw()
       obsGroup.destroyEach();
       dieSound.play();
     }
+    //To detect and decrease the chanes when monkey touches any       beger
+    if(monkey.isTouching(begGroup))
+    {
+      donation=donation+1;
+      begGroup.destroyEach();
+      dieSound.play();
+    }
     
     //To play a beep sound in multiple of 20 i.e.20,40,60,80
     if(score>0&&score%20===0)
@@ -215,7 +224,9 @@ function draw()
     obstacles();
     food();
     bonusFood();
+    beger();
   }
+
   else if(gameState===END)
   {
     //To make restart & game Over invisible
@@ -230,6 +241,8 @@ function draw()
     orangeGroup.destroyEach();
     obsGroup.setVelocityEach(0);
     obsGroup.destroyEach();
+    begGroup.setVelocityEach(0);
+    begGroup.destroyEach();
   }
   
   if(ground.x<0)
@@ -264,7 +277,7 @@ function draw()
   text("Food stuff collected: "+score,20,35);
   text("Survival Time: "+survivalTime,450,35);
   text("Chances: "+chances,250,35);
-  
+  text("Donations: "+donations,550,35);
   
 }
 
@@ -286,6 +299,21 @@ function obstacles()
   obstacle.lifetime=width/obstacle.velocity;
   //Adding obstacles to obsgroup
   obsGroup.add(obstacle);
+  }
+  function beger()
+{
+  //To make obstacles appear at interval of 130 frames
+  if(frameCount%200===0)
+  {
+  beggar=createSprite(60,height-75,10,10); 
+  beggar.addImage(beggar_Img);
+  beggar.scale=0.110;
+  //To assign velocity to banana
+  beggar.velocityX=-(4+score/15);
+  //To assign lifetime to banana to avoid memory leaks
+  beggar.lifetime=width/obstacle.velocity;
+  //Adding obstacles to obsgroup
+  begGroup.add(beggar);
   }
 }
 
@@ -337,6 +365,7 @@ function reset()
   score=0;
   chances=3;
   survivalTime=10;
+  donations=0;
   gameOver.visible=false;
   restart.visible=false;
 }
