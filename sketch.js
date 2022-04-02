@@ -36,7 +36,7 @@ function preload()
   orange_img=loadImage("orange.png");
   gameOver_img=loadImage("gameover.png");
   restart_img=loadImage("restart.png");
-  beggar_img = loadImage("beggar.png");
+  beggar_img = loadImage("trex_collided.png");
   //To load sounds  
   longjump_sound=loadSound("longjump.mp3");
   jumpSound=loadSound("jump.mp3");
